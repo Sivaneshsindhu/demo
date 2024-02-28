@@ -4,13 +4,16 @@ jobs:
   my-job:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
       - name: my-step
         run: echo "Hello World!"
-        
+
       - name: Deploy to Server 1
         uses: easingthemes/ssh-deploy@main
+        with:
+          args: '-r ${{ secrets.HOST_DNS }} -l ${{ secrets.USERNAME }} -i ${{ secrets.EC2_SSH_KEY }} -d ${{ secrets.TARGET_DIR }}'
         env:
           SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
-          REMOTE_HOST: ${{ secrets.HOST_DNS }}
-          REMOTE_USER: ${{ secrets.USERNAME }}
-          TARGET: ${{ secrets.TARGET_DIR }}
+
