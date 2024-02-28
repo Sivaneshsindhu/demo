@@ -1,19 +1,24 @@
-name: hello-world
-on: push
-jobs:
-  my-job:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+name: Push-to-EC2
 
-      - name: my-step
-        run: echo "Hello World!"
+# Trigger deployment only on push to master branch
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    name: Deploy to EC2 on master branch push
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the files
+        uses: actions/checkout@v2
 
       - name: Deploy to Server 1
         uses: easingthemes/ssh-deploy@main
-        with:
-          args: '-r ${{ secrets.HOST_DNS }} -l ${{ secrets.USERNAME }} -i ${{ secrets.EC2_SSH_KEY }} -d ${{ secrets.TARGET_DIR }}'
         env:
           SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
-
+          REMOTE_HOST: ${{ secrets.HOST_DNS }}
+          REMOTE_USER: ${{ secrets.USERNAME }}
+          TARGET: ${{ secrets.TARGET_DIR }}
