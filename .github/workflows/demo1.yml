@@ -1,20 +1,12 @@
-name: Push-to-EC2
-
-# Trigger deployment only on push to master branch
-on:
-  push:
-    branches:
-      - master
-
+name: hello-world
+on: push
 jobs:
-  deploy:
-    name: Deploy to EC2 on master branch push
+  my-job:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout the files
-        uses: actions/checkout@v2
-
+      - name: my-step
+        run: echo "Hello World!"
+        
       - name: Deploy to Server 1
         uses: easingthemes/ssh-deploy@main
         env:
